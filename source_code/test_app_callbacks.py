@@ -17,7 +17,7 @@ def test_calculate_y_hardcode_2_plus_2_equal_4():
     assert output == 4
 
 def test_model_input_shape():
-    filename = './models/Staging/values.pkl'
+    filename = './app/values.pkl'
     with open(filename, 'rb') as handle:
         values = pickle.load(handle)
     ohe = values['ohe']
