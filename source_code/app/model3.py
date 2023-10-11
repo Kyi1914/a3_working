@@ -6,7 +6,7 @@ def calculate_y_hardcode(x_1, x_2, submit):
 
 def calculate_y_model(x_1,x_2,x_3,x_4, submit):
     pred = calculate_model(x_1,x_2,x_3,x_4)
-    return f" model said: {pred=}" # type:ignore
+    return f" model said: {pred=}"
 
 def calculate_model(x_1,x_2,x_3,x_4):
     from utils import load_mlflow
@@ -15,18 +15,24 @@ def calculate_model(x_1,x_2,x_3,x_4):
     import mlflow
     import pickle
     mlflow.set_tracking_uri("https://mlflow.cs.ait.ac.th/")
-    model_name = "st124145-a3-model"
+    model_name = "st124087-a3-model"
     model = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}/Staging")
-    filename = './models/Staging/values.pkl'
+    filename = './values.pkl'
     with open(filename, 'rb') as handle:
         values = pickle.load(handle)
     ohe = values['ohe']
-    poly = values['poly']
     scaler = values['scaler']
     encoded_brand = list(ohe.transform([[x_1]]).toarray()[0])
     sample = np.array([[x_2,x_3,x_4] + encoded_brand])
     sample[:, 0: 2] = scaler.transform(sample[:, 0: 2])
     sample = np.insert(sample, 0, 1, axis=1)
-    sample_poly = poly.transform(sample)
-    pred = model.predict(sample_poly) # type:ignore
+    
+    expected_feature_names = ['intercept','max_power', 'year', 'fuel', 'Ashok', 'Audi', 'BMW', 'Chevrolet', 'Daewoo', 'Datsun', 'Fiat', 'Force', 'Ford', 'Honda', 'Hyundai', 'Isuzu', 'Jaguar', 'Jeep', 'Kia', 'Land', 'Lexus', 'MG', 'Mahindra', 'Maruti', 'Mercedes-Benz', 'Mitsubishi', 'Nissan', 'Opel', 'Peugeot', 'Renault', 'Skoda', 'Tata', 'Toyota', 'Volkswagen', 'Volvo']
+
+    # Set the column names of the 'sample' DataFrame
+    sample = pd.DataFrame(sample, columns=expected_feature_names)
+
+    
+    # sample_poly = poly.transform(sample)
+    pred = model.predict(sample) # type:ignore
     return pred

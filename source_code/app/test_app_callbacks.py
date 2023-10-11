@@ -2,7 +2,7 @@ from contextvars import copy_context
 import mlflow
 
 import pytest
-import model3
+import model3 as model3
 import pickle
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ def test_calculate_y_hardcode_2_plus_2_equal_4():
     assert output == 4
 
 def test_model_input_shape():
-    filename = './app/values.pkl'
+    filename = './values.pkl'
     with open(filename, 'rb') as handle:
         values = pickle.load(handle)
     ohe = values['ohe']
