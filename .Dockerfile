@@ -1,5 +1,6 @@
 FROM python:3.11.4-bookworm
 
+WORKDIR /root/source_code/app
 RUN pip3 install --upgrade pip
 RUN pip3 install numpy==1.26.0
 RUN pip3 install pandas==2.1.1
